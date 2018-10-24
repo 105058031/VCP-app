@@ -1,10 +1,8 @@
-"use strict";
-/**
+"use strict";/**
  * @license
  * Copyright (c) 2018, General Electric
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
-
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -15,61 +13,10 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */(function(){Polymer({
-	 is:"px-sample-dashboard",
-properties:{
-	title:{
-			type:String,
-			value:""},
-	dropItems:{
-		 type:Array,
-		 value: function value(){
-			let now = new Date();
+ */(function(){Polymer({is:"px-sample-dashboard",properties:{title:{type:String,value:""},
 
-			let onejan = new Date(now.getFullYear(), 0, 1);
-
-			var week = 0;
-
-			week = Math.ceil( (((now - onejan) / 86400000) + onejan.getDay() + 1) / 7 );
-
-			var stringent = "FW" + week;
-
-			var damphair = []			
-			damphair[0] = { "key" : String(week), "val" : stringent, "selected": "true" }
-			for (var i = 1;
- i < 6;
- i++) {
-			stringent = "FW" + String(week-i);
-
-			damphair[i] = { "key" : String(week-i), "val" : stringent }
-			}
-			console.log(damphair);
-
-			return damphair;
-
-								}
-	 },
-	 oneURL:{
-		type: String,
-		value: function value() {
-		let now = new Date();
-
-		let onejan = new Date(now.getFullYear(), 0, 1);
-
-		var week = 0;
-
-		week = Math.ceil( (((now - onejan) / 86400000) + onejan.getDay() + 1) / 7 );
-
-		return "https://fbororestapi.run.aws-usw02-pr.ice.predix.io/VTStock/"+String(week)+"/";
-
-		}
-	 },
- chartData:{
-	 type:Array,
-	 value:function value()
-	 {
-		 return[
-{"timeStamp":1227232494001,"y0":"6.44","y1":"-3.96","y2":"-7.89","y3":"4.26"},	
+ chartData:{type:Array,value:function value(){return[
+{"timeStamp":1227232494001,"y0":"6.44","y1":"-3.96","y2":"-7.89","y3":"4.26"},
 {"timeStamp":1228472111570,"y0":"6.31","y1":"-4.38","y2":"-7.60","y3":"3.65"},
 {"timeStamp":1229711729139,"y0":"5.75","y1":"-4.17","y2":"-7.47","y3":"3.90"},
 {"timeStamp":1230951346708,"y0":"5.96","y1":"-4.24","y2":"-6.78","y3":"4.15"},
@@ -293,34 +240,10 @@ properties:{
 handleResponse: function(e)
 { 	if (e.detail.response!=null)	
 		{
-	this.SV = String(Math.round(Number(e.detail.response["0"].To_Stock)/1000));
-
+	this.SV = e.detail.response["0"].To_Stock;
 		}
 },
-dropdownChanged: function(e)
-{
-	console.log(this.$.zeDrop.selected);
-},
-selectChanged: function(e)
-{
-	console.log("FW" + this.$.zeDrop.selected + " has been selected");
-	this.$.one.url = "https://fbororestapi.run.aws-usw02-pr.ice.predix.io/VTStock/"+String(this.$.zeDrop.selected)+"/";
-	this.$.one.generateRequest();
-},
-
 attached:function attached(){this.listen(document.querySelector("#cb"),"selected-changed","updateValues")},
 detached:function detached(){this.unlisten(document.querySelector("#cb"),"selected-changed")},
-updateValues:function updateValues(){
-	var gauges=document.querySelectorAll("px-gauge");
-
-	gauges.forEach(function(gauge){gauge.set("value",Math.floor(Math.random()*100))});
-
-	var keyvalues=document.querySelectorAll("px-key-value-pair");
-keyvalues.forEach(function(keyvalue){keyvalue.set("value",Math.floor(Math.random()*100))})},
-ready: function() {
-        this.$.one.generateRequest();
-
-    }
-	})})();
-
+updateValues:function updateValues(){var gauges=document.querySelectorAll("px-gauge");gauges.forEach(function(gauge){gauge.set("value",Math.floor(Math.random()*100))});var keyvalues=document.querySelectorAll("px-key-value-pair");keyvalues.forEach(function(keyvalue){keyvalue.set("value",Math.floor(Math.random()*100))})}})})();
 //# sourceMappingURL=px-sample-dashboard.js.map

@@ -21,7 +21,8 @@
     "px-vis-radar": "^4.0.0",
     "px-vis-polar": "^4.0.0",
     "px-datetime-picker": "^2.0.0",
-    "px-data-grid": "^1.0.0"
+    "px-data-grid": "^1.0.0",
+    "px-dropdown": "^4.7.8"
   },
   "devDependencies": {
     "webcomponentsjs": "^1.0.0",
