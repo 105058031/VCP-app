@@ -35,34 +35,22 @@ properties:{
 			var stringent = "FW" + week;
 
 			var damphair = []			
-			damphair[0] = { "key" : String(week), "val" : stringent, "selected": "true" }
-			for (var i = 1;
- i < 6;
- i++) {
+			damphair[0] = { "key" : String(week), "val" : stringent }
+			for (var i = 1;i < 7;i++) {
 			stringent = "FW" + String(week-i);
 
 			damphair[i] = { "key" : String(week-i), "val" : stringent }
+			if (i===1)
+			{
+			damphair[i] = { "key" : String(week-i), "val" : stringent 	, "selected": "true"}
+			}
+			
 			}
 			console.log(damphair);
 
 			return damphair;
 
 								}
-	 },
-	 oneURL:{
-		type: String,
-		value: function value() {
-		let now = new Date();
-
-		let onejan = new Date(now.getFullYear(), 0, 1);
-
-		var week = 0;
-
-		week = Math.ceil( (((now - onejan) / 86400000) + onejan.getDay() + 1) / 7 );
-
-		return "https://fbororestapi.run.aws-usw02-pr.ice.predix.io/VTStock/"+String(week)+"/";
-
-		}
 	 }},
 handleResponse: function(e)
 { 	if (e.detail.response!=null)	
@@ -72,7 +60,8 @@ handleResponse: function(e)
 	this.P = String(Math.round(Number(e.detail.response["0"].varPercent)*1000))/10;
 	this.AV = String(Math.round(Number(e.detail.response["0"].absVar)/1000));
 	this.NV = String(Math.round(Number(e.detail.response["0"].netVar)/1000));
-	this.AP = String(Math.round(Number(e.detail.response["0"].absVar)/Number(e.detail.response["0"].PTo_Stock)*1000))/10;
+	this.AP = String(Math.round((Number(e.detail.response["0"].absVar)/Number(e.detail.response["0"].PTo_Stock)*1000))/10);
+	
 		}
 },
 handleSelect: function(e, chart, component)
@@ -83,19 +72,56 @@ handleSelect2: function(e, chart, component)
 {
 	console.log(e);
 },
+handleTab: function(e)
+{
+	
+		this.tableData = e.detail.response;
+	this.colOrder = [{"name":"WO","path":"WO","editable":false,"id":"first[string]"},
+					{"name":"Material","path":"Material","editable":false,"id":"second[string]"},
+					{"name":"Description","path":"Material Description","editable":false,"id":"third[string]"},
+					{"name":"Labor","path":"Labor","editable":false,"id":"fourth[string]"},
+					{"name":"Direct M.","path":"Direct Material","editable":false,"id":"fifth[string]"},
+					{"name":"Rework","path":"Rework","editable":false,"id":"sixth[string]"},
+					{"name":"Ext Op","path":"External Services","editable":false,"id":"seventh[string]"},
+					{"name":"Sum Variance","path":"Sum_Var","editable":false,"id":"eighth[string]"}]
+	//console.log(e);
+},
 handleChart: function(e)
 { 	if (e.detail.response!=null)	
 		{
 			var shodo = []
 			this.ajaxResponse = []
-			this.min = 0;
-			this.max = 0;
+			this.StP = 100
+			var maxster = 0;
+			var interim = 0;
+			var whichWeek = 0;
+			let now = new Date();
+			let onejan = new Date(now.getFullYear(), 0, 1);
+			var week = 0;
+			week = Math.ceil( (((now - onejan) / 86400000) + onejan.getDay() + 1) / 7 );
 		for (var row in e.detail.response)
 			{
 	//#this.ajaxResponse.push(String(Math.round(Number(e.detail.response["0"].ATo_Stock)/1000));
 	shodo.push("FW" + String(Math.round(Number(e.detail.response[row].FW),0)));
-
+			console.log("-------------------");
+			console.log("Week: " + String(week - 8 + row));
+			console.log("Maxster is: " + String((Number(e.detail.response[row].negVariance) + Number(e.detail.response[row].posVariance)) /Number(e.detail.response[row].varpercent)));
+			
+			if((Number(e.detail.response[row].negVariance) + Number(e.detail.response[row].posVariance)) /Number(e.detail.response[row].varpercent) > maxster)
+			{
+				
+				
+				maxster = (Number(e.detail.response[row].negVariance) + Number(e.detail.response[row].posVariance)) /Number(e.detail.response[row].varpercent);
+				
 			}
+			
+			 
+			
+			}
+
+			whichWeek = 7 -( week- this.$.zeDrop.selected);
+			interim = Number((Number(e.detail.response[whichWeek].negVariance) + Number(e.detail.response[whichWeek].posVariance)) /Number(e.detail.response[whichWeek].varpercent));
+		this.StP = Math.round((interim/maxster)*1000)/10;
 		this.categoryList = { "categories" : shodo };
 		this.ajaxResponse=[{
 "type":"column",
@@ -132,7 +158,14 @@ handleChart: function(e)
 ["FW" + String(Math.round(Number(e.detail.response[5].FW),0)),-1*Number(e.detail.response[5].posVariance)],
 ["FW" + String(Math.round(Number(e.detail.response[6].FW),0)),-1*Number(e.detail.response[6].posVariance)],
 ["FW" + String(Math.round(Number(e.detail.response[7].FW),0)),-1*Number(e.detail.response[7].posVariance)],
-] }, 
+],
+"point": {
+    "events": {
+        "select": function(event) {
+            console.log('point selected @ ' + this.x + ', ' + this.y);
+                    }
+			}
+		} }, 
 {
 "type":"spline",
 "color":"#FF0000",
@@ -158,7 +191,9 @@ selectChanged: function(e)
 {
 	console.log("FW" + this.$.zeDrop.selected + " has been selected");
 	this.$.VAR.url = "https://fbororestapi.run.aws-usw02-pr.ice.predix.io/VarStats/"+String(this.$.zeDrop.selected)+"/";
+	this.$.tab.url = "https://fbororestapi.run.aws-usw02-pr.ice.predix.io/VarTab/"+String(this.$.zeDrop.selected)+"/";
 	this.$.VAR.generateRequest();
+	this.$.tab.generateRequest();
 },
 
 attached:function attached(){this.listen(document.querySelector("#cb"),"selected-changed","updateValues")},

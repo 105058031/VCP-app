@@ -15,7 +15,6 @@ limitations under the License.
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer.html" />
-
 <!-- Predix components used by this app view -->
 <link rel="import" href="../bower_components/px-card/px-card.html" />
 <link rel="import" href="../bower_components/px-simple-bar-chart/px-simple-bar-chart.html" />
@@ -34,11 +33,11 @@ limitations under the License.
 
     <!-- By placing several px-key-value-pairs in a flex container, we can easily create a "spine" which is a term
          we use for a row of KPIs or other high level information about an asset on the top of a dashboard. -->
-
-    <div id="bnd" class="spine u-pt" style="padding: 2% 3% 0% 3%; width:94%; background-color: #FFFFFF;">
-      <span class="heading--page u-p">{{title}}</span>		
-	  <div style="float: right; display: inline-block;" >
-	  <px-dropdown
+    <div class="u-mh+">
+	
+	<div id="bnd" class="spine u-pt" style="background-color: #FFFFFF;">
+      <div style="float: right; display: inline-block;" >
+	  	  <px-dropdown
 		id="zeDrop"
 		items="[[dropItems]]"
 		prevent-close-on-outside-click="true"
@@ -47,85 +46,76 @@ limitations under the License.
 		on-display-value-changed="dropdownChanged"
 		on-selected-changed="selectChanged">
 		</px-dropdown>
-		</div>
+	  </div>
+	  <span class="heading--page">{{title}}</span>
+      <span class="heading--subsection u-mv++">Quick Stats</span>
+	 
+	  
+
+		
 
 	 
 	
-      <div class="flex flex--wrap flex--justify" style="background-color: #FFFFFF;">
-        
-        <px-key-value-pair class="u-p" key="Net Variance Amount" value="{{NV}}" uom="K $" size="beta"></px-key-value-pair>
-        <px-key-value-pair class="u-p" key="Net Variance Percent" value={{P}} uom="%" size="beta"></px-key-value-pair>
-		<px-key-value-pair class="u-p" key="Absolute Variance Amount" value={{AV}} uom="K $" size="beta"></px-key-value-pair>
-		<px-key-value-pair class="u-p" key="Absolute Variance Percent" value={{AP}} uom="%" size="beta"></px-key-value-pair>
-		<px-key-value-pair class="u-p" key="Actual Cost to Stock" value={{AC}} uom="K $" size="beta"></px-key-value-pair>
+      <div class="flex u-mv+" >
 
-        <px-key-value-pair class="u-p" key="Standard Cost to Stock" value={{SC}} uom="K $" size="beta"></px-key-value-pair>
-        <!--<px-key-value-pair class="u-p" key="Output" value="53" uom="MW" size="beta"></px-key-value-pair>-->
-      </div>
+
+		<div class="u-mr+ u-1/3">
+		<div class="gaugeContainer u-p u-mb flex flex--col">
+          <div class="flex u-mb">
+            <px-key-value-pair key="Put to Stock" value={{SC}} uom="K$" size="delta"></px-key-value-pair>
+            <px-simple-bar-chart class="u-ml++" width="100" height="50" chart-data='[ [112,57,53,122,128,120,56] ]' colors='["#8098FF"]'></px-simple-bar-chart>
+          </div>
+          <px-gauge class="gauge1" value={{StP}} unit="%" normal='[[80,100]]' abnormal='[[45,59]]' anomaly='[[60,79]]' error='[[0,44]]'  bar-width="20"></px-gauge>
+        </div>
+		</div>
+		<div class="u-mr+ u-1/3">
+        <div class="gaugeContainer u-p u-mb flex flex--col">
+          <div class="flex u-mb">
+            <px-key-value-pair key="Net Variance" value={{P}} uom="%" size="delta"></px-key-value-pair>
+            <px-simple-bar-chart class="u-ml++" width="100" height="50" chart-data='[ [53,122,128,120,56,94,102] ]' colors='["#7BA662"]'></px-simple-bar-chart>
+          </div>
+          <px-gauge class="gauge2" value={{P}} unit="%" normal='[ [0,10] ]'  error='[[11,100]]' min="-20" max="50" bar-width="20"></px-gauge>
+        </div>
+		</div>
+		<div class="u-mr+ u-1/6">
+        <px-key-value-pair key="Net Variance USD" value="{{NV}}" uom="K $" size="gamma"></px-key-value-pair>
+        <px-key-value-pair key="Abs Variance USD" value={{AV}} uom="K $" size="gamma"></px-key-value-pair>
+		<px-key-value-pair key="Actual Cost to Stock" value={{AC}} uom="K $" size="gamma"></px-key-value-pair>
+		</div>
+		<div class="u-mr+ u-1/6">
+		<px-key-value-pair key="Net Variance %" value={{P}} uom="%" size="gamma"></px-key-value-pair>
+		<px-key-value-pair key="Abs Variance %" value={{AP}} uom="%" size="gamma"></px-key-value-pair>
+		<px-key-value-pair key="Standard Cost to Stock" value={{SC}} uom="K $" size="gamma"></px-key-value-pair>
+		</div>
+	  </div>
+
     </div>
-	<px-card class="light-card" header-text="Weekly Variance" icon="px-fea:orchestration" style="padding: 0% 3% 0% 3%;  background-color: #FFFFFF; width:94%;">
+	</div>
+<div class="u-mh+">
+	<px-card class="light-card" header-text="Exhaust TC Differentials" icon="px-fea:orchestration" style="background-color: #FFFFFF;">
       <px-icon slot='actions' icon='px-utl:app-settings' ></px-icon>
+
 	<highcharts-chart  id="tri" type="column" 
 	data = "[[ajaxResponse]]"
 	stacking = "normal" 
-	y-axis='[{"title": {"text": "Variance"},"min":-120000,"max":50000},{"opposite": true,"title": {"text": "Net"}, "min":-40,"max":40}]'
+	y-axis='[{"title": {"text": "Variance"}},{"opposite": true,"title": {"text": "Net"}, "min":-40,"max":40}]'
 	x-axis="{{categoryList}}"
-	x-zoom x-label="FW" title="" y-label="Variance"></highcharts-chart>
-    </px-card>
+	x-zoom x-label="FW" title="" 
+	y-label="Variance"
+	on-chart-click="handleSelect"
+	></highcharts-chart>
+</px-card>
+</div>
 
-    <!-- This first px-card contains 4 kpis with bar charts and 4 gauges -->
-	<px-card class="light-card" header-text="Exhaust TC Differentials" icon="px-fea:orchestration" style="padding: 0% 3% 0% 3%;  background-color: #FFFFFF; width:94%;">
-      <px-icon slot='actions' icon='px-utl:app-settings' ></px-icon>
-      <px-vis-timeseries
-        debounce-resize-timing="250"
-        width=500
-        height=350
-        chart-horizontal-alignment="center"
-        chart-vertical-alignment="center"
-        register-config='{"type":"horizontal"}'
-        chart-data="[[chartData]]"
-        series-config='{"y0":{"name":"TC01-TTXM","x":"timeStamp","y":"y0","yAxisUnit":"C"},"y1":{"name":"TC02-TTXM","x":"timeStamp","y":"y1","yAxisUnit":"C"},"y2":{"name":"TC03-TTXM","x":"timeStamp","y":"y2","yAxisUnit":"C"},"y3":{"name":"TC04-TTXM","x":"timeStamp","y":"y3","yAxisUnit":"C"}}'
-        chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}'
-        x-axis-config='{"title":"Date"}'
-        y-axis-config='{"title":"Temperature","titleTruncation":false,"unit":"C"}' 
-		style="margin: 0% 3% 0% 3%;">
-      </px-vis-timeseries>
-    </px-card>
-    <px-card header-text="Productivity Details" icon="px-fea:alerts" style="padding: 0% 3% 0% 3%;  background-color: #FFFFFF; width:94%;">
-      <px-icon slot='actions' icon='px-utl:app-settings'></px-icon>
-      <div class="flex flex--wrap flex--justify">
-        <div class="gaugeContainer u-p u-mb flex flex--col">
-          <div class="flex u-mb">
-            <px-key-value-pair key="Put to Stock" value="110" uom="MW" size="delta"></px-key-value-pair>
-            <px-simple-bar-chart class="u-ml++" width="100" height="50" chart-data='[ [112,57,53,122,128,120,56] ]' colors='["#8098FF"]'></px-simple-bar-chart>
-          </div>
-          <px-gauge class="gauge1" value="85" unit="%" normal='[ [0,100] ]' bar-width="20"></px-gauge>
-        </div>
-        <div class="gaugeContainer u-p u-mb flex flex--col">
-          <div class="flex u-mb">
-            <px-key-value-pair key="Measured Output" value="15" uom="MW" size="delta"></px-key-value-pair>
-            <px-simple-bar-chart class="u-ml++" width="100" height="50" chart-data='[ [53,122,128,120,56,94,102] ]' colors='["#7BA662"]'></px-simple-bar-chart>
-          </div>
-          <px-gauge class="gauge2" value="10" unit="%" normal='[ [0,100] ]' bar-width="20"></px-gauge>
-        </div>
-        <div class="gaugeContainer u-p u-mb flex flex--col">
-          <div class="flex u-mb">
-            <px-key-value-pair key="Measured Output" value="121" uom="MW" size="delta"></px-key-value-pair>
-            <px-simple-bar-chart class="u-ml++" width="100" height="50" chart-data='[ [53,122,128,120,56,94,102] ]' colors='["#E081C9"]'></px-simple-bar-chart>
-          </div>
-          <px-gauge class="gauge3" value="65" unit="%" normal='[ [0,100] ]' bar-width="20"></px-gauge>
-        </div>
-        <div class="gaugeContainer u-p u-mb flex flex--col">
-          <div class="flex u-mb">
-            <px-key-value-pair key="Measured Output" value="98" uom="MW" size="delta"></px-key-value-pair>
-            <px-simple-bar-chart class="u-ml++" width="100" height="50" chart-data='[ [53,122,128,120,56,94,102] ]' colors='["#E9A24B"]'></px-simple-bar-chart>
-          </div>
-          <px-gauge class="gauge4" value="90" unit="%" normal='[ [0,100] ]' bar-width="20"></px-gauge>
-        </div>
-      </div>
-    </px-card>
+<px-card class="light-card" header-text="Top 10" icon="px-nav:list-view"  style="padding: 0% 3% 0% 3%;  background-color: #FFFFFF; width:94%;">
+		<px-icon slot='actions' icon='px-utl:app-settings' ></px-icon>
+            <px-data-grid table-data='[[tableData]]' columns='[[colOrder]]' hide-action-menu>
+            </px-data-grid>
+</px-card>
 
-    <!-- This last px-card includes a px-vis-timeseries chart. -->
+
+
+
     
 	<iron-ajax 
 	id="VAR"
@@ -134,6 +124,7 @@ limitations under the License.
 	on-response="handleResponse"></iron-ajax>
 	
 	<iron-ajax id="sec" auto="" url="https://fbororestapi.run.aws-usw02-pr.ice.predix.io/VarChart/" handle-as="json" on-response="handleChart"></iron-ajax>
+	<iron-ajax id="tab" auto="" url={{tabURL}} handle-as="json" on-response="handleTab"></iron-ajax>
 	
   </template>
 </dom-module>
