@@ -116,7 +116,23 @@ limitations under the License.
               <button class="btn btn--call-to-action u-mv+">Submit</button>
             </div>
           </div>
-
+	<px-card class="light-card" header-text="Exhaust TC Differentials" icon="px-fea:orchestration" style="padding: 0% 3% 0% 3%;  background-color: #FFFFFF; width:94%;">
+      <px-icon slot='actions' icon='px-utl:app-settings' ></px-icon>
+      <px-vis-timeseries
+        debounce-resize-timing="250"
+        width=500
+        height=350
+        chart-horizontal-alignment="center"
+        chart-vertical-alignment="center"
+        register-config='{"type":"horizontal"}'
+        chart-data="[[chartData]]"
+        series-config='{"y0":{"name":"TC01-TTXM","x":"timeStamp","y":"y0","yAxisUnit":"C"},"y1":{"name":"TC02-TTXM","x":"timeStamp","y":"y1","yAxisUnit":"C"},"y2":{"name":"TC03-TTXM","x":"timeStamp","y":"y2","yAxisUnit":"C"},"y3":{"name":"TC04-TTXM","x":"timeStamp","y":"y3","yAxisUnit":"C"}}'
+        chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}'
+        x-axis-config='{"title":"Date"}'
+        y-axis-config='{"title":"Temperature","titleTruncation":false,"unit":"C"}' 
+		style="margin: 0% 3% 0% 3%;">
+      </px-vis-timeseries>
+    </px-card>
           <px-card class="light-card" header-text="Fleet" icon="px-obj:steam-turbine">
             <px-icon slot='actions' icon='px-utl:app-settings'></px-icon>
             <px-data-grid table-data='[[tableData]]' hide-action-menu>
