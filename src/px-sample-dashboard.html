@@ -62,10 +62,10 @@ limitations under the License.
 		<div class="u-mr+ u-1/3">
 		<div class="gaugeContainer u-p u-mb flex flex--col">
           <div class="flex u-mb">
-            <px-key-value-pair key="Put to Stock" value={{SC}} uom="K$" size="delta"></px-key-value-pair>
-            <px-simple-bar-chart class="u-ml++" width="100" height="50" chart-data='[ [112,57,53,122,128,120,56] ]' colors='["#8098FF"]'></px-simple-bar-chart>
+            <px-key-value-pair key="STD to Stock" value={{SC}} uom="K$" size="delta"></px-key-value-pair>
+            <px-simple-bar-chart class="u-ml++" width="100" height="50" chart-data="[[smallChart]]" colors='[[coloringS]]'></px-simple-bar-chart>
           </div>
-          <px-gauge class="gauge1" value={{StP}} unit="%" normal='[[80,100]]' abnormal='[[45,59]]' anomaly='[[60,79]]' error='[[0,44]]'  bar-width="20"></px-gauge>
+          <px-gauge class="gauge1" value={{StP}} unit="%" normal="[[80,100]]" abnormal="[[45,59.9]]" anomaly="[[60,79.9]]" error="[[0,44.9]]"  bar-width="20"></px-gauge>
         </div>
 		</div>
 		<div class="u-mr+ u-1/3">
@@ -74,7 +74,7 @@ limitations under the License.
             <px-key-value-pair key="Net Variance" value={{P}} uom="%" size="delta"></px-key-value-pair>
             <px-simple-bar-chart class="u-ml++" width="100" height="50" chart-data='[ [53,122,128,120,56,94,102] ]' colors='["#7BA662"]'></px-simple-bar-chart>
           </div>
-          <px-gauge class="gauge2" value={{P}} unit="%" normal='[ [0,10] ]'  error='[[11,100]]' min="-20" max="50" bar-width="20"></px-gauge>
+          <px-gauge class="gauge2" value={{P}} unit="%" normal='[ [0,10] ]'  error="[[11,100]]" min="-20" max="50" bar-width="20"></px-gauge>
         </div>
 		</div>
 		<div class="u-mr+ u-1/6">
@@ -102,27 +102,31 @@ limitations under the License.
 	x-axis="{{categoryList}}"
 	x-zoom x-label="FW" title="" 
 	y-label="Variance"
-	on-chart-click="handleSelect"
 	></highcharts-chart>
 </px-card>
 </div>
 
 <px-card class="light-card" header-text="Top 10" icon="px-nav:list-view"  style="padding: 0% 3% 0% 3%;  background-color: #FFFFFF; width:94%;">
 		<px-icon slot='actions' icon='px-utl:app-settings' ></px-icon>
-            <px-data-grid table-data='[[tableData]]' columns='[[colOrder]]' hide-action-menu>
+            <px-data-grid 
+			id="datgrid"
+			table-data="[[tableData]]" 
+			columns="[[colOrder]]" 
+			on-tableData-changed="heatMap"
+			ontableDataChanged="heatMap"
+			on-tableDataChanged="heatMap"
+			on-loading-changed="LoadChange"
+			hide-action-menu >
+			
             </px-data-grid>
 </px-card>
-
-
-
-
     
 	<iron-ajax 
 	id="VAR"
 	url={{actURL}}
 	handle-as="json" 
 	on-response="handleResponse"></iron-ajax>
-	
+	<iron-ajax id="sto" auto="" url="https://fbororestapi.run.aws-usw02-pr.ice.predix.io/StockStats/" handle-as="json" on-response="handleStock"></iron-ajax>
 	<iron-ajax id="sec" auto="" url="https://fbororestapi.run.aws-usw02-pr.ice.predix.io/VarChart/" handle-as="json" on-response="handleChart"></iron-ajax>
 	<iron-ajax id="tab" auto="" url={{tabURL}} handle-as="json" on-response="handleTab"></iron-ajax>
 	

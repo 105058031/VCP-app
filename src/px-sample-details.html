@@ -1,0 +1,143 @@
+<!--
+Copyright (c) 2018, General Electric
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer.html" />
+
+<!-- Predix components used by this app view -->
+<link rel="import" href="../bower_components/px-tabs/px-tabs.html" />
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html" />
+<link rel="import" href="../bower_components/px-key-value-pair/px-key-value-pair.html" />
+<link rel="import" href="../bower_components/px-data-grid/px-data-grid.html" />
+<link rel="import" href="../bower_components/px-card/px-card.html" />
+<link rel="import" href="../bower_components/px-dropdown/px-dropdown.html" />
+<link rel="import" href="../bower_components/px-toggle/px-toggle.html" />
+<link rel="import" href="../bower_components/px-datetime-picker/px-datetime-picker.html" />
+<link rel="import" href="../bower_components/vaadin-grid/vaadin-grid.html">
+<link rel="import" href="../bower_components/px-icon-set/px-icon-set.html"/>
+<!-- Load styles -->
+<link rel="import" href="../css/px-sample-app-styles.html" />
+
+<dom-module id="px-sample-details">
+  <template>
+    <style include="px-sample-app-styles"></style>
+      <!-- Disabled for the sake of simplicity, but you should use Polymer (or whatever framework you want to use)
+        to bind together the "selected" properties of both px-tabs and iron-pages, so that a change of one will trigger a change of the other. -->
+		<div class="u-m+" style="float: right; display: inline-block;" >
+			  	  <px-dropdown
+		id="Drop"
+		items="[[dropItems]]"
+		prevent-close-on-outside-click="true"
+		button-style="bare--primary"
+		select-by="key"
+		sort-mode="key"
+		
+		on-selected-changed="selectChanged">
+		<!--on-display-value-changed="dropdownChanged"-->
+		</px-dropdown>
+		</div>    
+		
+	<px-tabs class="u-m+" selected="{{selected}}">
+        <px-tab id='tab1'>Labour</px-tab>
+        <px-tab id='tab2'>Material</px-tab>
+
+      </px-tabs>
+	  
+
+	  
+		<px-card class="light-card" header-text="desWassup" icon="px-obj:steam-turbine">
+            <px-icon slot='actions' icon='px-utl:app-settings'></px-icon>
+            <px-data-grid 
+			id="datgrid"
+			table-data="[[tableData]]" 
+			columns="[[colOrder]]" 
+			hide-action-menu >
+			
+            </px-data-grid>
+          </px-card>
+
+      <iron-pages selected={{selected}}>
+
+        <!-- Container for the content of the 1st px-tab -->
+        <div>
+
+	<px-card class="light-card" header-text="Exhaust TC Differentials" icon="px-fea:orchestration" style="padding: 0% 3% 0% 3%;  background-color: #FFFFFF; width:94%;">
+    
+    <vaadin-grid on-active-item-changed="_onActiveItemChanged" 
+	id="grid" aria-label="Details Opened Items Example" 
+	items="[[users]]">
+
+      <template class="row-details">
+        <div class="details">
+          <!--<img src="[[item.picture.large]]">-->
+          <p>
+            Status - [[item.Status]]!<br>
+			<small>Confirmation count is [[item.cnt]]</small>
+			<small>The boolean variable is [[item.c]]</small>
+          </p>
+        </div>
+		
+      </template>
+
+      <vaadin-grid-column width="50px" flex-grow="0">
+        <template class="header">#</template>
+        <template>[[item.Op]]</template>
+      </vaadin-grid-column>
+
+      <vaadin-grid-column width="80px" flex-grow="0">
+        <template class="header">WC</template>
+        <template>[[item.WC]]</template>
+      </vaadin-grid-column>
+
+	  <vaadin-grid-column width="70px" flex-grow="0">
+        <template class="header">Std Hrs</template>
+        <template>[[item.Std_Hrs]]</template>
+      </vaadin-grid-column>
+	  
+	  <vaadin-grid-column width="70px" flex-grow="0">
+        <template class="header">Cnf Hrs</template>
+        <template>[[item.Conf_Hrs]]</template>
+      </vaadin-grid-column>
+	  
+      <vaadin-grid-column width="140px">
+        <template class="header">Operation</template>
+        <template>[[item.Operation]]</template>
+      </vaadin-grid-column>
+		
+	<vaadin-grid-column width="32px">
+		<template class="header"></template>
+		<template> <px-icon icon="px-fea:users" style="stroke:#AA0000;display:[[item.c]]"></px-icon> <px-icon icon="px-nav:generic-user" style="display:[[item.cneg]]"></px-icon></template>
+	  </vaadin-grid-column> 
+	  
+    </vaadin-grid>
+	
+    </px-card>
+
+        </div>
+        <!-- Container for the content of the 2nd px-tab -->
+        <div>
+          <span class="heading--page">Configure Fleet</span>
+        </div>
+        <!-- Container for the content of the 3rd px-tab -->
+        
+
+      </iron-pages>
+ <iron-ajax auto url="https://fbororestapi.run.aws-usw02-pr.ice.predix.io/Ops/20645440/" handle-as="json" last-response="{{users}}"></iron-ajax>
+ <iron-ajax auto url="https://fbororestapi.run.aws-usw02-pr.ice.predix.io/Confs/20645440/" handle-as="json" last-response="{{users}}"></iron-ajax>
+
+<iron-ajax id="tabl" auto="" url={{tabURL}} handle-as="json" on-response="handleTable"></iron-ajax>
+  </template>
+</dom-module>
+<script src="px-sample-details.js"></script>

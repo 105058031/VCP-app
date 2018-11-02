@@ -27,6 +27,7 @@ limitations under the License.
 <!-- Views used by the app -->
 <link rel="import" href="px-sample-layout.html" />
 <link rel="import" href="px-sample-dashboard.html" />
+<link rel="import" href="px-sample-details.html" />
 <link rel="import" href="px-sample-inbox.html" />
 
 <!-- Load styles -->
@@ -40,7 +41,10 @@ limitations under the License.
     <px-app-header>
 
       <px-app-nav slot="app-nav" selected-route="{{selected}}"
-        items='[{"label": "Dashboard","path": "dashboard","icon": "px-fea:dashboard", "id": "dashboard"}, {"label": "Analytics","id": "tabs","icon": "px-fea:analysis"}, {"label": "Alerts","path": "inbox","icon": "px-fea:alerts", "id": "inbox"}]'>
+        items='[{"label": "Dashboard","path": "dashboard","icon": "px-fea:dashboard", "id": "dashboard"}, 
+		{"label": "Analytics","id": "tabs","icon": "px-fea:analysis"}, 
+		{"label": "Details","id": "details","icon": "px-fea:log"}, 
+		{"label": "Alerts","path": "inbox","icon": "px-fea:alerts", "id": "inbox"}]'>
       </px-app-nav>
       <div>
 
@@ -64,6 +68,10 @@ limitations under the License.
 
         <template is="dom-if" if="{{isEqual(selected,'dashboard')}}" restamp>
           <px-sample-dashboard title="{{selectedAsset}}"></px-sample-dashboard>
+        </template>
+		
+		<template is="dom-if" if="{{isEqual(selected,'details')}}" restamp>
+          <px-sample-details></px-sample-details>
         </template>
 
         <template is="dom-if" if="{{isEqual(selected,'inbox')}}" restamp>
