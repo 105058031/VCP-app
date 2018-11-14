@@ -20,7 +20,6 @@ limitations under the License.
 <link rel="import" href="../bower_components/px-simple-bar-chart/px-simple-bar-chart.html" />
 <link rel="import" href="../bower_components/px-key-value-pair/px-key-value-pair.html" />
 <link rel="import" href="../bower_components/px-gauge/px-gauge.html" />
-<link rel="import" href="../bower_components/px-card/px-card.html" />
 <link rel="import" href="../bower_components/px-vis-timeseries/px-vis-timeseries.html" />
 <link rel="import" href="../bower_components/px-dropdown/px-dropdown.html" />
 <link rel="import" href="../bower_components/highcharts-chart/highcharts-chart.html">
@@ -36,21 +35,9 @@ limitations under the License.
     <div class="u-mh+">
 	
 	<div id="bnd" class="spine u-pt" style="background-color: #FFFFFF;">
-      <div style="float: right; display: inline-block;" >
-	  	  <px-dropdown
-		id="zeDrop"
-		items="[[dropItems]]"
-		prevent-close-on-outside-click="true"
-		select-by="key"
-		sort-mode="key"
-		on-display-value-changed="dropdownChanged"
-		on-selected-changed="selectChanged">
-		</px-dropdown>
-	  </div>
-	  <span class="heading--page">{{title}}</span>
+
       <span class="heading--subsection u-mv++">Quick Stats</span>
-	 
-	  
+
 
 		
 
@@ -80,19 +67,19 @@ limitations under the License.
 		<div class="u-mr+ u-1/6">
         <px-key-value-pair key="Net Variance USD" value="{{NV}}" uom="K $" size="gamma"></px-key-value-pair>
         <px-key-value-pair key="Abs Variance USD" value={{AV}} uom="K $" size="gamma"></px-key-value-pair>
-		<px-key-value-pair key="Actual Cost to Stock" value={{AC}} uom="K $" size="gamma"></px-key-value-pair>
+		<px-key-value-pair key="Act Cost to Stock" value={{AC}} uom="K $" size="gamma"></px-key-value-pair>
 		</div>
 		<div class="u-mr+ u-1/6">
 		<px-key-value-pair key="Net Variance %" value={{P}} uom="%" size="gamma"></px-key-value-pair>
 		<px-key-value-pair key="Abs Variance %" value={{AP}} uom="%" size="gamma"></px-key-value-pair>
-		<px-key-value-pair key="Standard Cost to Stock" value={{SC}} uom="K $" size="gamma"></px-key-value-pair>
+		<px-key-value-pair key="Std Cost to Stock" value={{SC}} uom="K $" size="gamma"></px-key-value-pair>
 		</div>
 	  </div>
 
     </div>
 	</div>
 <div class="u-mh+">
-	<px-card class="light-card" header-text="Exhaust TC Differentials" icon="px-fea:orchestration" style="background-color: #FFFFFF;">
+	<px-card class="light-card" header-text="Net VCP Settlement Variance" icon="px-fea:orchestration" style="background-color: #FFFFFF;">
       <px-icon slot='actions' icon='px-utl:app-settings' ></px-icon>
 
 	<highcharts-chart  id="tri" type="column" 
@@ -121,14 +108,10 @@ limitations under the License.
             </px-data-grid>
 </px-card>
     
-	<iron-ajax 
-	id="VAR"
-	url={{actURL}}
-	handle-as="json" 
-	on-response="handleResponse"></iron-ajax>
-	<iron-ajax id="sto" auto="" url="https://fbororestapi.run.aws-usw02-pr.ice.predix.io/StockStats/" handle-as="json" on-response="handleStock"></iron-ajax>
-	<iron-ajax id="sec" auto="" url="https://fbororestapi.run.aws-usw02-pr.ice.predix.io/VarChart/" handle-as="json" on-response="handleChart"></iron-ajax>
-	<iron-ajax id="tab" auto="" url={{tabURL}} handle-as="json" on-response="handleTab"></iron-ajax>
+	<iron-ajax auto url$="https://fbororestapi.run.aws-usw02-pr.ice.predix.io/VarStats/{{title}}/" handle-as="json" on-response="handleResponse"></iron-ajax>
+	<iron-ajax auto url$="https://fbororestapi.run.aws-usw02-pr.ice.predix.io/StockStats/{{title}}/" handle-as="json" on-response="handleStock"></iron-ajax>
+	<iron-ajax auto id="sec" url="https://fbororestapi.run.aws-usw02-pr.ice.predix.io/VarChart/" handle-as="json" on-response="handleChart"></iron-ajax>
+	<iron-ajax auto url$="https://fbororestapi.run.aws-usw02-pr.ice.predix.io/VarTab/{{title}}/" handle-as="json" on-response="handleTab"></iron-ajax>
 	
   </template>
 </dom-module>

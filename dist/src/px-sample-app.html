@@ -27,6 +27,7 @@ limitations under the License.
 <!-- Views used by the app -->
 <link rel="import" href="px-sample-layout.html" />
 <link rel="import" href="px-sample-dashboard.html" />
+<link rel="import" href="px-sample-details.html" />
 <link rel="import" href="px-sample-inbox.html" />
 
 <!-- Load styles -->
@@ -35,15 +36,20 @@ limitations under the License.
 <dom-module id="px-sample-app">
   <template>
     <style include="px-sample-app-styles"></style>
-
+      
+	  	  
+	  
     <!-- If you're using px-app-nav in its vertical configuration, you should use px-branding-bar instead of px-app-header -->
     <px-app-header>
 
       <px-app-nav slot="app-nav" selected-route="{{selected}}"
-        items='[{"label": "Dashboard","path": "dashboard","icon": "px-fea:dashboard", "id": "dashboard"}, {"label": "Analytics","id": "tabs","icon": "px-fea:analysis"}, {"label": "Alerts","path": "inbox","icon": "px-fea:alerts", "id": "inbox"}]'>
+        items='[{"label": "Dashboard","path": "dashboard","icon": "px-fea:dashboard", "id": "dashboard"}, 
+		{"label": "Analytics","id": "tabs","icon": "px-fea:analysis"}, 
+		{"label": "Details","id": "details","icon": "px-fea:log"}, 
+		{"label": "Alerts","path": "inbox","icon": "px-fea:alerts", "id": "inbox"}]'>
       </px-app-nav>
       <div>
-
+	  
         <!-- The px-context-browser and px-breadcrumbs can be used in combination to provide both the traditional drilldown navigation
             as well as an interactive breadcrumb for quick navigation throughout the hierarchy. Place them both in a flex--row so that
             they appear next to each other in a container. -->
@@ -53,8 +59,24 @@ limitations under the License.
           <px-context-browser id="cb" open-trigger="[[openTrigger]]" show-favorited favorited-trigger="[[favoritedTrigger]]" items="{{items}}" selected-route='{{selectedRoute}}' loading-timeout="5"></px-context-browser>
           <px-breadcrumbs class="flex__item" items="{{items}}" selected-route='{{selectedRoute}}' click-only-mode></px-breadcrumbs>
         </div>
+	<div class="u-mh+">
+	<div id="bnd" class="spine u-pt" style="background-color: #FFFFFF;">
 
-
+	  <span class="heading--page" style="width: 50%;">{{selectedAsset}}</span>
+      
+	 
+	        <div style="float: right; display: inline-block;" >
+	  	  <px-dropdown
+		id="Drop"
+		items="{{droplist}}"
+		prevent-close-on-outside-click="true"
+		select-by="key"
+		sort-mode="key"
+		on-selected-changed="selectChanged">
+		</px-dropdown>
+	  </div>
+	  </div>
+	</div>
         <!-- These three dom-if blocks dictate which module (page/view) is rendered in the main content area, based on the px-app-nav selection.
             Alternatively, you could use px-app-route to instead bind px-app-nav to the browser's URL bar for more complex page routing. -->
 
@@ -63,15 +85,20 @@ limitations under the License.
         </template>
 
         <template is="dom-if" if="{{isEqual(selected,'dashboard')}}" restamp>
-          <px-sample-dashboard title="{{selectedAsset}}"></px-sample-dashboard>
+          <px-sample-dashboard title={{selectedWeek}} asset={{selectedAsset}}></px-sample-dashboard>
+        </template>
+		
+		<template is="dom-if" if="{{isEqual(selected,'details')}}" restamp>
+          <px-sample-details title={{selectedWeek}}></px-sample-details>
         </template>
 
         <template is="dom-if" if="{{isEqual(selected,'inbox')}}" restamp>
           <px-sample-inbox></px-sample-inbox>
         </template>
 
+<iron-ajax auto url="https://fbororestapi.run.aws-usw02-pr.ice.predix.io/weeks/" handle-as="json" last-response="{{droplist}}"></iron-ajax>
         <div class="footer flex flex--left flex--middle u-p">
-          <a class="actionable" href="https://github.com/PredixDev/px-sample-app" target="_blank">Get the code for this sample application on GitHub</a>
+          <a class="actionable" target="_blank">Anton is a large plonker</a>
         </div>
 
       </div>

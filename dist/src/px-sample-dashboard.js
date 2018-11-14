@@ -103,7 +103,7 @@ handleStock: function(e)
 	
 	
 	
-		if(String(Math.round(e.detail.response[i].FW)) == String(Math.round(this.$.zeDrop.selected)))
+		if(String(Math.round(e.detail.response[i].FW)) == String(Math.round(this.title)))
 		{
 		this.SC = String(Math.round(Number(e.detail.response[i].Stock)/1000));
 		this.StP = String(Math.round(Number(e.detail.response[i].Mpercent)*1000)/10);
@@ -204,15 +204,6 @@ dropdownChanged: function(e)
 heatMap: function(e)
 {
 	console.log(this.$.zeDrop.selected);
-},
-selectChanged: function(e)
-{
-	console.log("FW" + this.$.zeDrop.selected + " has been selected");
-	this.$.VAR.url = "https://fbororestapi.run.aws-usw02-pr.ice.predix.io/VarStats/"+String(this.$.zeDrop.selected)+"/";
-	this.$.tab.url = "https://fbororestapi.run.aws-usw02-pr.ice.predix.io/VarTab/"+String(this.$.zeDrop.selected)+"/";
-	this.$.VAR.generateRequest();
-	this.$.tab.generateRequest();
-	this.$.sto.generateRequest();
 },
 
 attached:function attached(){this.listen(document.querySelector("#cb"),"selected-changed","updateValues")},

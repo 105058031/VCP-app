@@ -105,13 +105,7 @@ limitations under the License.
 	padding-bottom: 30px;
 	
 	}
-	.details>px-data-grid{			
-	background-color: #96a8b2;
-	}
-	:host(.row-details.details>px-data-grid>px-data-grid-cell-content-wrapper){
-	background-color: #96a8b2;
-	}
-	
+
 	</style>
       <template class="row-details">
         <div class="details">
@@ -120,11 +114,10 @@ limitations under the License.
             Status - [[item.Status]]!<br></p>
 			
 			<px-data-grid 
-			id$="sTab{{currentWO}}{{item.Op}}"
 			table-data$={{leverthis(respon,item.Op)}} 
 			columns=[[colto]]
 			selection-mode="none"
-			hide-action-menu 
+			hide-action-menu 	
 			>
             </px-data-grid>
 			

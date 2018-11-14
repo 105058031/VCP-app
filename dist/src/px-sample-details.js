@@ -133,10 +133,8 @@ handleTableSelect: function(e){
 	if(e.target.id =='grid2')
 	{
         this.$.grid2.detailsOpenedItems = [e.detail.value];
-		console.log(this.lilTab);
 	}else{
 		this.$.grid1.detailsOpenedItems = [e.detail.value];
-		
 	}
 	
         },
@@ -166,7 +164,6 @@ ready: function () {
 					{"name":"Yield","path":"Yield","editable":false,"id":"seventh[string]", "flexGrow":0.05},
 					{"name":"Scrap","path":"Scrap","editable":false,"id":"eighth[string]", "flexGrow":0.05},
 					{"name":"Final","path":"Final","editable":false,"id":"ninth[string]", "flexGrow":0.05}];		
-			
 					}
 })
 })();
